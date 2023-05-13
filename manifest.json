@@ -1,0 +1,24 @@
+{
+    "name": "Facebook Auto Messenger",
+    "version": "1.0",
+    "manifest_version": 2,
+    "description": "Facebook Auto Message Sender Extension",
+    "browser_action": {
+      "default_icon": "/assets/icons/128.png",
+      "default_popup": "popup.html"
+    },
+	"icons": {
+		"128": "/assets/icons/128.png"
+	},	
+	"background": {
+  "service_worker": "background.js"
+},
+  "content_scripts": [
+    {
+      "matches": ["https://*/*"],
+      "js": ["oncopy.js"]
+    }
+  ],
+	 "content_security_policy": "script-src 'self' 'sha256-WOdSzz11/3cpqOdrm89LBL2UPwEU9EhbDtMy2OciEhs='",
+    "permissions": ["tabs", "<all_urls>", "notifications","contextMenus","storage","clipboardRead","clipboardWrite"]
+  }
