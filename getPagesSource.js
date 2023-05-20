@@ -1,99 +1,94 @@
-	
 function DOMtoString(document_root) {
-    let skills=document.querySelector("main > fl-container > fl-page-layout-single > fl-grid > fl-col:nth-child(1) > fl-card > fl-bit > fl-bit.CardBody > app-project-details-skills > fl-bit").innerText.replaceAll("\n",", ").replace(/,(?=[^,]*$)/, ' and');
+// Create the "Shop Now" button
+var shopNowButton = document.createElement('button');
+shopNowButton.textContent = 'Shop Now Posts : 0';
+shopNowButton.style.position = 'fixed';
+shopNowButton.style.bottom = '20px';
+shopNowButton.style.right = '20px';
+shopNowButton.style.padding = '10px';
+shopNowButton.style.backgroundColor = 'blue';
+shopNowButton.style.color = 'white';
+shopNowButton.style.border = 'none';
+shopNowButton.style.borderRadius = '5px';
 
-	let subject=document.querySelector("h1 > fl-text:nth-child(2)").innerText;
-	// subject=subject.replaceAll("I ", "you ");
-	subject=subject.replaceAll("my ", "your ");
-	subject=subject.replaceAll("our ", "your ");
-	subject=subject.replaceAll(" me ", " you ");	
-	subject=subject.replaceAll(" Looking for ", "");	
-	subject=subject.replaceAll(" looking for ", "");	
-	subject=subject.replaceAll(" want to ", " you want to ");	
-	subject=subject.replaceAll(" website for ", " you need website for ");	
-   	
-	if(subject.startsWith("want "))		subject=subject.replace("want ", "You want ");
-	if(subject.startsWith("Need "))		subject=subject.replace("Need ", "You need ");
-	if(subject.startsWith("i need"))	subject=subject.replace("i need", "You need ");
-	if(subject === "build a website")	subject=subject.replace("build a website", "your need a website developer to build your website ");		
-  subject =subject.split("--")[0].trim();
+// Create the "Total Posts" button
+var totalPostsButton = document.createElement('button');
+totalPostsButton.textContent = 'Total Posts Loaded : 0';
+totalPostsButton.style.position = 'fixed';
+totalPostsButton.style.bottom = '80px';
+totalPostsButton.style.right = '20px';
+totalPostsButton.style.padding = '10px';
+totalPostsButton.style.backgroundColor = 'green';
+totalPostsButton.style.color = 'white';
+totalPostsButton.style.border = 'none';
+totalPostsButton.style.borderRadius = '5px';
 
-//	let bid="Hi, I have seen this, "+subject+" project and I can do this right now. I am an expert in "+skills+" skills";	
-//  let bid="How early you need delivery of this project? I am available and can start work to complete it within your time and budget as I know  "+skills+" skills";	
-let bid="Hi, I have seen project \""+subject+"\", I am free and available to work. I am verified expert freelancer ☑️ in  "+skills+" skills. Please come to chat to proceed it on urgent basis. Thanks for posting project on freelancer.com";	
+// Append the buttons to the document body
+document.body.appendChild(shopNowButton);
+document.body.appendChild(totalPostsButton);
 
-	copyTextToClipboard(document_root,bid);
-document.querySelector("app-bid-form > fl-card > fl-bit > fl-bit.CardBody > fl-bit.BidFormBtn.ng-star-inserted > fl-button").style.position="absolute";
-document.querySelector("app-bid-form > fl-card > fl-bit > fl-bit.CardBody > fl-bit.BidFormBtn.ng-star-inserted > fl-button").style.top="150%";
+// Add unique selectors to each button
+shopNowButton.classList.add('shop-now-button');
+totalPostsButton.classList.add('total-posts-button');
+
+
+// Append button to the document body
+// document.body.appendChild(button);
+
+let shop_counter=0;
+setInterval(function() {
+  window.scrollTo(0, document.body.scrollHeight);
+  setTimeout(() => {
+    var element = document.querySelectorAll('div[role="feed"]')[1];
+    element = element.innerHTML;
+    var tempElement = document.createElement('div');
+    tempElement.innerHTML = element;
+    
+    // Remove the first child
+    if (tempElement.firstElementChild) {
+      tempElement.firstElementChild.remove();
+    }
+    
+    // Remove the last child
+    if (tempElement.lastElementChild) {
+      tempElement.lastElementChild.remove();
+      tempElement.lastElementChild.remove();
+      tempElement.lastElementChild.remove();
+    }
+    var childCount = tempElement.childElementCount;  
+    console.log("total post loaded : " + childCount);
+    
+    document.querySelector("body > button.total-posts-button").innerText="Total Posts Loaded : "+childCount;
+    tempElement.remove();
+    // loop each element
+    var elements = document.querySelectorAll('div[role="feed"]')[1].children;
+    
+    for (var i = 1; i < elements.length-4; i++) { // skip first and last 3
+      var element = elements[i];
+      if (element.innerHTML.includes('#gid179')) {
+        // The text is found within the element's innerHTML
+        console.log('Element contains "#gid179":', element);
+        ++shop_counter;
+        document.querySelector("body > button.shop-now-button").innerText="Shop Now Posts : "+shop_counter;
+      }else{
+        element.style.display = "none";
+      }
+      // Perform actions with each element
+      console.log(element);
+    }
+      
+    }, 1000);  
+
+
+
+  
+}, 10000); 
+
 
     return 'done...';
-}
-
-function copyTextToClipboard(document1,text) {
-  
-    setTimeout(function() {
-        //Create a textbox field where we can insert text to.
-        if(!(  document.getElementById("descriptionTextAreaExtended"))){
-            let new_tag = document.createElement("textarea");
-            new_tag.setAttribute("id", "descriptionTextAreaExtended");
-            document.body.appendChild(new_tag);
-                  }
-		
-        setTimeout(function() {
-            var copyFrom=document.getElementById("descriptionTextAreaExtended");
-            copyFrom.textContent = text;
-			copyFrom.select();
-			document.execCommand('copy');
-			document.querySelector("#descriptionTextArea").focus();
-			document.execCommand('paste');			
-
-               setTimeout(function() {
-        			    document.querySelector("fl-grid > fl-col:nth-child(1) > app-project-details-freelancer > app-bid-form > fl-card > fl-bit > fl-bit.CardBody > fl-bit.BidFormBtn.ng-star-inserted > fl-button > button").click();
-                }, 20000);
- 
-            // level 3
-        }, 500);
-        }, 500);
-
 }
 
 chrome.runtime.sendMessage({
     action: "getSource",
     source: DOMtoString(document)
 });
-
-
-function timeSince(date) {
-
-  var seconds = Math.floor((new Date() - date) / 1000);
-
-  var interval = seconds / 31536000;
-
-  if (interval > 1) {
-    return Math.floor(interval) + " years";
-  }
-  interval = seconds / 2592000;
-  if (interval > 1) {
-    return Math.floor(interval) + " months";
-  }
-  interval = seconds / 86400;
-  if (interval > 1) {
-    return Math.floor(interval) + " days";
-  }
-  interval = seconds / 3600;
-  if (interval > 1) {
-    return Math.floor(interval) + " hours";
-  }
-  interval = seconds / 60;
-  if (interval > 1) {
-    return Math.floor(interval) + " minutes";
-  }
-  return Math.floor(seconds) + " seconds";
-}
-
-
-
-
-function lowercaseFirstLetter(string) {
-  return string.charAt(0).toLowerCase() + string.slice(1);
-}

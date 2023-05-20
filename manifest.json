@@ -1,8 +1,8 @@
 {
-    "name": "Facebook Auto Messenger",
+    "name": "Facebook Profile Shop Now Counter",
     "version": "1.0",
     "manifest_version": 2,
-    "description": "Facebook Auto Message Sender Extension",
+    "description": "Facebook Profile Shop Now Counter Extension",
     "browser_action": {
       "default_icon": "/assets/icons/128.png",
       "default_popup": "popup.html"
@@ -20,5 +20,5 @@
     }
   ],
 	 "content_security_policy": "script-src 'self' 'sha256-WOdSzz11/3cpqOdrm89LBL2UPwEU9EhbDtMy2OciEhs='",
-    "permissions": ["tabs", "<all_urls>", "notifications","contextMenus","storage","clipboardRead","clipboardWrite"]
+    "permissions": ["activeTab","tabs", "<all_urls>", "notifications","contextMenus","storage","clipboardRead","clipboardWrite"]
   }

@@ -15,10 +15,10 @@ chrome.runtime.onInstalled.addListener( () => {
 chrome.extension.onRequest.addListener(
 	function(request, sender, sendResponse) {
 		if (request.event == "copy") {
-			alert("copy detected");
+			console.log("copy detected");
 		}
 		if (request.event == "paste") {
-			alert("paste detected");
+			console.log("paste detected");
 		}
 
 		sendResponse({});
@@ -40,7 +40,7 @@ const notify = message => {
 		'',
 		{
 			type: 'basic',
-			title: 'Note For Bidding!',
+			title: 'Notificaiton!',
 			message: message || 'Notify!',
 			iconUrl: './assets/icons/128.png',
 		}
